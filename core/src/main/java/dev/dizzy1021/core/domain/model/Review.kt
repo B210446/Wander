@@ -5,7 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Review(
-    val id: Int,
     val username: String,
     val rating: Double,
     val desc: String,

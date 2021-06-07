@@ -10,49 +10,37 @@ data class ResponseHome(
 	@field:SerializedName("is_favorite")
 	val isFavorite: Boolean,
 
-	@field:SerializedName("latt")
-	val latitude: String,
-
-	@field:SerializedName("open_link")
-	val openLink: String,
-
-	@field:SerializedName("rating")
-	val rating: Double,
-
-	@field:SerializedName("description")
-	val description: String,
-
-	@field:SerializedName("review_link")
-	val reviewLink: String,
-
-	@field:SerializedName("long")
-	val longitude: String,
-
-	@field:SerializedName("image_path")
-	val imagePath: List<ImagePathItem>,
+	@field:SerializedName("lng")
+	val lng: Double,
 
 	@field:SerializedName("name")
 	val name: String,
 
-	@field:SerializedName("top_reviews")
-	val responseReviews: List<ResponseReviews>,
+	@field:SerializedName("rating")
+	val rating: Double,
 
-	@field:SerializedName("create_review_link")
-	val createReviewLink: String,
+	@field:SerializedName("open_link")
+	val openLink: String? = null,
 
 	@field:SerializedName("location")
-	val location: String,
+	val location: String? = null,
 
 	@field:SerializedName("id")
-	val id: String
+	val id: String,
+
+	@field:SerializedName("poster")
+	val poster: Poster? = null,
+
+	@field:SerializedName("lat")
+	val lat: Double
 ) : Parcelable
 
 @Parcelize
-data class ImagePathItem(
+data class Poster(
 
 	@field:SerializedName("url")
-	val url: String,
+	val url: String? = null,
 
 	@field:SerializedName("content_description")
-	val contentDescription: String?
+	val contentDescription: String? = null
 ) : Parcelable

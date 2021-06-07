@@ -3,10 +3,8 @@ package dev.dizzy1021.wander.ui.place.feedback
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -65,15 +63,7 @@ class GoogleReviewFragment : Fragment() {
                         "}})(); ", null)
             }
         }
-
-        binding.webViewReviews.webChromeClient = object : WebChromeClient() {
-            override fun onJsAlert(view: WebView, url: String, message: String, result: android.webkit.JsResult): Boolean {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-                result.confirm()
-                return true
-            }
-        }
-
+        
         binding.webViewReviews.loadUrl(url)
 
         return binding.root

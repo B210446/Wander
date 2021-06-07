@@ -8,10 +8,10 @@ import java.io.InputStream
 
 interface ReviewUseCase {
 
-    fun getReviews(page: Int, user: String): Flow<ResourceWrapper<List<Review>>>
+    fun getReviews(user: String): Flow<ResourceWrapper<List<Review>>>
 
-    fun fetchReviewPlace(id: String): Flow<PagingData<Review>>
+    fun fetchReviewPlace(id: String, user: String): Flow<PagingData<Review>>
 
-    fun addReview(id: String, images: List<InputStream?>, user: String, desc: String, rating: Int): Flow<ResourceWrapper<String?>>
+    fun addReview(id: String, user: String, images: List<InputStream?>, desc: String, rating: Int): Flow<ResourceWrapper<String?>>
 
 }

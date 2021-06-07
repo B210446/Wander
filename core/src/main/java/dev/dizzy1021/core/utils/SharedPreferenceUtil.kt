@@ -1,7 +1,6 @@
 package dev.dizzy1021.core.utils
 
 import android.content.SharedPreferences
-import java.util.*
 import javax.inject.Inject
 
 class SharedPreferenceUtil @Inject constructor(
@@ -25,7 +24,7 @@ class SharedPreferenceUtil @Inject constructor(
 
     fun setUser() {
         val editor: SharedPreferences.Editor = pref.edit()
-        val user = UUID.randomUUID().toString()
+        val user = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6bnVsbH0.Lvu9wZ21LUqYwOsifBIKQ93OsqQe7BRtrwumxxipgFc"
 
         editor.putString(PREF_USER, user)
         editor.apply()

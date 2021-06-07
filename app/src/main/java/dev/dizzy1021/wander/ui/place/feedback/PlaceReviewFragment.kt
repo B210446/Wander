@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.dizzy1021.core.adapter.ReviewAdapter
 import dev.dizzy1021.core.adapter.ReviewLoadStateAdapter
+import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.core.utils.isNetworkAvailable
 import dev.dizzy1021.wander.R
 import dev.dizzy1021.wander.databinding.FragmentPlaceReviewBinding
-import dev.dizzy1021.wander.ui.place.PlaceFragmentArgs
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlaceReviewFragment : Fragment() {
@@ -26,6 +27,8 @@ class PlaceReviewFragment : Fragment() {
     private val binding get() = _binding as FragmentPlaceReviewBinding
     private val viewModel: FeedbackViewModel by viewModels()
 
+    @Inject
+    lateinit var pref: SharedPreferenceUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +64,8 @@ class PlaceReviewFragment : Fragment() {
         val adapter = ReviewAdapter()
         val idPlace = PlaceReviewFragmentArgs.fromBundle(arguments as Bundle).id
 
+        val user = pref.getUser()
+
         binding.rvReview.layoutManager =
             LinearLayoutManager(context)
 
@@ -74,12 +79,14 @@ class PlaceReviewFragment : Fragment() {
         if (isNetworkAvailable(requireActivity())) {
 
             lifecycleScope.launch {
-                viewModel.reviews(idPlace).collectLatest { reviews ->
-                    binding.networkError.isGone = true
-                    binding.rvReview.isVisible = true
-                    binding.shimmerContainer.isGone = true
+                user?.let {
+                    viewModel.reviews(idPlace, it).collectLatest { reviews ->
+                        binding.networkError.isGone = true
+                        binding.rvReview.isVisible = true
+                        binding.shimmerContainer.isGone = true
 
-                    adapter.submitData(reviews)
+                        adapter.submitData(reviews)
+                    }
                 }
             }
 

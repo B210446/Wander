@@ -30,7 +30,7 @@ class SearchViewModel @Inject constructor(
                 return@filter it.trim().length >= 3
             }
             .flatMapLatest {
-                useCase.searchPlaces(user, it, image)
+                useCase.searchPlaces(it, image, user)
             }
     }
 

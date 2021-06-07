@@ -13,15 +13,6 @@ data class ResponseReviews(
     @field:SerializedName("rating")
     val rating: Double,
 
-    @field:SerializedName("link")
-    val link: String,
-
-    @field:SerializedName("id")
-    val id: Int,
-
-    @field:SerializedName("user")
-    val user: String,
-
     @field:SerializedName("place_id")
     val placeId: String,
 

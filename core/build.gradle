@@ -20,7 +20,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
-        buildConfigField("String", "API_KEY_SERVER", '"bea5877e5c294bd9976495a972ac2c3d"')
         buildConfigField("String", "API_KEY_GOOGLE", '"AIzaSyDBmn1-rBVvIQU6gKIDpvqfCRJut_uVgeA"')
     }
 

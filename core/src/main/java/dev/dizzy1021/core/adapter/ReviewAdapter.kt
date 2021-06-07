@@ -47,7 +47,7 @@ class ReviewAdapter : PagingDataAdapter<Review, ReviewAdapter.ListViewHolder>(Di
     object DiffCallback : DiffUtil.ItemCallback<Review>() {
 
         override fun areItemsTheSame(oldItem: Review, newItem: Review): Boolean {
-            return oldItem.id == newItem.id
+            return (oldItem.username == newItem.username) && (oldItem.placeId == newItem.placeId)
         }
 
         override fun areContentsTheSame(oldItem: Review, newItem: Review): Boolean {

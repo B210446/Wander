@@ -31,19 +31,19 @@ class PlaceRepository @Inject constructor(
 
     override fun fetchHome(user: String): Flow<PagingData<Place>> =
         Pager(
-            PagingConfig(pageSize = 14, enablePlaceholders = false)
+            PagingConfig(pageSize = 20, enablePlaceholders = false)
         ) {
             remoteDataSource.fetchHome(user)
         }.flow.flowOn(Dispatchers.IO)
 
-    override fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
+    override fun getWishlist(user: String): Flow<ResourceWrapper<List<Place>>> {
         TODO("Not yet implemented")
     }
 
     override fun searchPlaces(
-        user: String,
         q: String?,
-        image: InputStream?
+        image: InputStream?,
+        user: String
     ): Flow<PagingData<Place>> =
         Pager(
             PagingConfig(pageSize = 14, enablePlaceholders = false)
@@ -68,9 +68,9 @@ class PlaceRepository @Inject constructor(
             }
 
             val response = if (imagePart != null) {
-                remoteDataSource.findPlaces(user = user, q = q, image = imagePart)
+                remoteDataSource.findPlaces(q = q, user = user, image = imagePart)
             } else {
-                remoteDataSource.findPlaces(user = user, q = q)
+                remoteDataSource.findPlaces(q = q, user = user)
             }
 
             response
@@ -95,11 +95,12 @@ class PlaceRepository @Inject constructor(
                 ResourceState.FAILURE -> {
                     emit(ResourceWrapper.failure(response.message.toString(), null))
                 }
+                ResourceState.PENDING -> {}
             }
             IdlingResourceUtil.decrement()
         }.flowOn(Dispatchers.IO)
 
-    override fun addWishlist(id: Int, user: String, place: Place) {
+    override fun addWishlist(id: Int,  place: Place, user: String) {
         TODO("Not yet implemented")
     }
 }

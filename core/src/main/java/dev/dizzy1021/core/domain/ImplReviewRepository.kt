@@ -12,18 +12,18 @@ import javax.inject.Inject
 class ImplReviewRepository @Inject constructor(
     private val repository: IReviewRepository
 ) : ReviewUseCase{
-    override fun getReviews(page: Int, user: String): Flow<ResourceWrapper<List<Review>>> {
+    override fun getReviews(user: String): Flow<ResourceWrapper<List<Review>>> {
         TODO("Not yet implemented")
     }
 
-    override fun fetchReviewPlace(id: String): Flow<PagingData<Review>> = repository.fetchReviewPlace(id)
+    override fun fetchReviewPlace(id: String, user: String): Flow<PagingData<Review>> = repository.fetchReviewPlace(id, user)
 
-    override fun addReview(id: String, images: List<InputStream?>, user: String, desc: String, rating: Int) =
+    override fun addReview(id: String, user: String, images: List<InputStream?>, desc: String, rating: Int) =
         repository.addReview(
         id,
         images,
-        user,
         desc,
-        rating
+        rating,
+        user
     )
 }

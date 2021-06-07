@@ -14,8 +14,8 @@ class FeedbackViewModel @Inject constructor(
     private val useCase: ReviewUseCase
 ): ViewModel() {
 
-    val reviews = { id: String ->
-        useCase.fetchReviewPlace(id).cachedIn(viewModelScope)
+    val reviews = { id: String, user: String ->
+        useCase.fetchReviewPlace(id, user).cachedIn(viewModelScope)
     }
 
     val addReview = {

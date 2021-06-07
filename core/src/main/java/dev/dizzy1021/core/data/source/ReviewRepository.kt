@@ -27,29 +27,28 @@ class ReviewRepository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : IReviewRepository {
 
-    override fun getReviews(page: Int, user: String): Flow<ResourceWrapper<List<Review>>> {
+    override fun getReviews(user: String): Flow<ResourceWrapper<List<Review>>> {
         TODO("Not yet implemented")
     }
 
-    override fun fetchReviewPlace(id: String): Flow<PagingData<Review>> =
+    override fun fetchReviewPlace(id: String, user: String): Flow<PagingData<Review>> =
         Pager(
             PagingConfig(pageSize = 14, enablePlaceholders = false)
         ) {
-            remoteDataSource.fetchReviewPlace(id)
+            remoteDataSource.fetchReviewPlace(id, user)
 
         }.flow.flowOn(Dispatchers.IO)
 
     override fun addReview(
         id: String,
         images: List<InputStream?>,
-        user: String,
         desc: String,
-        rating: Int
+        rating: Int,
+        user: String
     ) =
         flow {
             emit(ResourceWrapper.pending(null))
 
-            val reqUser = user.toRequestBody()
             val reqDesc = desc.toRequestBody()
             val reqRating = rating.toString().toRequestBody()
             val reqImages = ArrayList<MultipartBody.Part?>()
@@ -73,10 +72,10 @@ class ReviewRepository @Inject constructor(
 
             val response = remoteDataSource.addReview(
                 id = id,
-                user = reqUser,
                 desc = reqDesc,
                 rating = reqRating,
-                images = reqImages.toList()
+                images = reqImages.toList(),
+                user = user
             ).first()
 
             when (response.state) {
@@ -87,6 +86,7 @@ class ReviewRepository @Inject constructor(
                 ResourceState.FAILURE -> {
                     emit(ResourceWrapper.failure(response.message.toString(), null))
                 }
+                ResourceState.PENDING -> {}
             }
         }.flowOn(Dispatchers.IO)
 

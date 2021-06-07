@@ -7,7 +7,37 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ResponsePlace(
 
-    @field:SerializedName("id")
-    val id: String?,
+	@field:SerializedName("is_favorite")
+	val isFavorite: Boolean,
 
-): Parcelable
+	@field:SerializedName("image_path")
+	val imagePath: List<Poster>,
+
+	@field:SerializedName("lat")
+	val lat: Double,
+
+	@field:SerializedName("name")
+	val name: String,
+
+	@field:SerializedName("open_link")
+	val openLink: String? = null,
+
+	@field:SerializedName("rating")
+	val rating: Double,
+
+	@field:SerializedName("top_reviews")
+	val topReviews: List<ResponseReviews>? = null,
+
+	@field:SerializedName("description")
+	val description: String? = null,
+
+	@field:SerializedName("location")
+	val location: String,
+
+	@field:SerializedName("id")
+	val id: String,
+
+	@field:SerializedName("lng")
+	val lng: Double
+) : Parcelable
+
