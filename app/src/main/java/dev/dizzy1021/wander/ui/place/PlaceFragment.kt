@@ -33,6 +33,7 @@ class PlaceFragment : Fragment() {
     private lateinit var pagerAdapter: GalleryPagerAdapter
     private lateinit var reviewAdapter: TopReviewAdapter
 
+
     private lateinit var latitude: String
     private lateinit var longitude: String
 
@@ -171,7 +172,8 @@ class PlaceFragment : Fragment() {
                 super.onPageSelected(position)
 
                 binding.indicatorGallery.text =
-                    StringBuilder().append(position + 1).append(" / ").append(pagerAdapter.itemCount)
+                    StringBuilder().append(position + 1).append(" / ")
+                        .append(pagerAdapter.itemCount)
             }
         })
 
@@ -189,6 +191,8 @@ class PlaceFragment : Fragment() {
         binding.buttonAllReview.setOnClickListener {
             navigateToReview(idPlace)
         }
+
+
 
     }
 

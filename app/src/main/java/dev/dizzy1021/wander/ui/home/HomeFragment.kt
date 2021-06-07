@@ -55,6 +55,14 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
                 return true
             }
+            R.id.wishlist -> {
+                findNavController().navigate(R.id.action_homeFragment_to_wishlistFragment)
+                return true
+            }
+            R.id.review -> {
+                findNavController().navigate(R.id.action_homeFragment_to_reviewFragment)
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

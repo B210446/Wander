@@ -18,7 +18,8 @@ interface Services {
     suspend fun callWishlist(
         @Query("key") key: String,
         @Query("page") page: Int,
-    ): Response<ResponseWrapper<ResponseWishlist>>
+        @Query("user") user: String,
+    ): Response<ResponseWrapper<List<ResponseHome>>>
 
     @GET("review")
     suspend fun callReview(

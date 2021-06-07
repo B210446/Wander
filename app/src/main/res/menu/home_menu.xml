@@ -7,4 +7,16 @@
         android:title="@string/search_places"
         app:iconTint="@color/blue"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/wishlist"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="@string/wishlist"
+        app:iconTint="@color/blue"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/review"
+        android:icon="@drawable/ic_baseline_rate_review_24"
+        android:title="@string/review"
+        app:iconTint="@color/blue"
+        app:showAsAction="ifRoom"/>
 </menu>

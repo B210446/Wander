@@ -60,19 +60,41 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }
 
-    suspend fun fetchWishlist(user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseWishlist>>> =
-         flow {
-            services.callWishlist(
-                page = 1,
-                key = user
-            ).let {
-                if (it.isSuccessful) {
-                    emit(ResourceWrapper.success(it.body()))
-                } else {
-                    emit(ResourceWrapper.failure("Failure when calling data", null))
+    fun fetchWishlist(user: String) =
+        object : PagingSource<Int, Place>() {
+
+            override fun getRefreshKey(state: PagingState<Int, Place>): Int? {
+                return state.anchorPosition
+            }
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Place> {
+                try {
+                    val currentLoadingPageKey = params.key ?: 1
+                    val response = services.callWishlist(
+                        page = currentLoadingPageKey,
+                        user = user
+                    )
+
+                    val responseData = mutableListOf<Place>()
+                    val data = response.body()?.data.let {
+                        it?.toPlace()
+                    } ?: emptyList()
+
+                    responseData.addAll(data)
+
+                    val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
+
+                    return LoadResult.Page(
+                        data = responseData,
+                        prevKey = prevKey,
+                        nextKey = currentLoadingPageKey.plus(1)
+                    )
+
+                } catch (e: Exception) {
+                    return LoadResult.Error(e)
                 }
             }
-        }.flowOn(Dispatchers.IO)
+        }
 
     suspend fun fetchReview(user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseReviews>>> =
         flow {
