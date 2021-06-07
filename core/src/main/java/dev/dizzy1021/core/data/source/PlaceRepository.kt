@@ -36,9 +36,12 @@ class PlaceRepository @Inject constructor(
             remoteDataSource.fetchHome(user)
         }.flow.flowOn(Dispatchers.IO)
 
-    override fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
-        TODO("Not yet implemented")
-    }
+    override fun getWishlist(user: String): Flow<PagingData<Place>> =
+        Pager(
+            PagingConfig(pageSize = 14, enablePlaceholders = false)
+        ){
+            remoteDataSource.fetchWishlist(user)
+        }.flow.flowOn(Dispatchers.IO)
 
     override fun searchPlaces(
         user: String,

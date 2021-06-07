@@ -15,9 +15,7 @@ class ImplPlaceRepository @Inject constructor(
 
     override fun fetchHome(user: String): Flow<PagingData<Place>> = repository.fetchHome(user)
 
-    override fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
-        TODO("Not yet implemented")
-    }
+    override fun getWishlist(user: String): Flow<PagingData<Place>> = repository.getWishlist(user)
 
     override fun searchPlaces(
         user: String,

@@ -10,7 +10,7 @@ interface IPlaceRepository {
 
     fun fetchHome(user: String): Flow<PagingData<Place>>
 
-    fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>>
+    fun getWishlist(user: String): Flow<PagingData<Place>>
 
     fun searchPlaces(user: String, q: String?, image: InputStream?): Flow<PagingData<Place>>
 

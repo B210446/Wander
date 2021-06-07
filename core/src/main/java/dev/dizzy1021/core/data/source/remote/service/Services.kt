@@ -24,7 +24,7 @@ interface Services {
         @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
         @Query("user") user: String,
-    ): Response<ResponseWrapper<ResponseWishlist>>
+    ): Response<ResponseWrapper<List<ResponseHome>>>
 
     @GET("review")
     suspend fun callReview(
