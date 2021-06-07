@@ -15,6 +15,7 @@
         app:shimmer_auto_start="true"
         app:shimmer_repeat_mode="restart"
         app:shimmer_repeat_count="5"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -26,7 +27,7 @@
 
     <ScrollView
         android:id="@+id/main_view"
-        android:visibility="gone"
+        android:visibility="visible"
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -99,6 +100,7 @@
                 android:id="@+id/place_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="300dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="?attr/colorOnPrimary"
@@ -111,13 +113,13 @@
                 android:id="@+id/place_open_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/blue"
                 android:textSize="12sp"
                 android:text="@string/open_in_map"
-                app:layout_constraintStart_toEndOf="@id/place_location"
-                app:layout_constraintTop_toBottomOf="@id/place_name" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/place_location" />
 
 
             <ImageView
@@ -152,7 +154,7 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/place_location"
+                app:layout_constraintTop_toBottomOf="@id/place_open_map"
                 tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" />
 
             <TextView

@@ -39,12 +39,13 @@ interface Services {
     suspend fun searchPlaces(
         @Query("key") key: String,
         @Query("q") q: String?,
+        @Query("location") loc: String? = null,
         @Query("token") token: String?,
     ): Response<ResponseWrapper<List<ResponseHome>>>
 
-    @GET("place/{id}")
+    @GET("place")
     suspend fun callPlaceById(
-        @Path("id") id: String,
+        @Query("id") id: String,
         @Query("key") key: String
     ): Response<ResponseWrapper<ResponsePlace>>
 

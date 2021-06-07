@@ -47,7 +47,7 @@ class GoogleReviewFragment : Fragment() {
         _binding = FragmentGoogleReviewBinding.inflate(inflater, container, false)
 
         val idPlace = GoogleReviewFragmentArgs.fromBundle(arguments as Bundle).id
-        val url = "https://search.google.com/local/reviews?placeid=ChIJaac90jeuEmsR0Evy-Wh9AQ8"
+        val url = "https://search.google.com/local/reviews?placeid=$idPlace"
 
         binding.webViewReviews.settings.javaScriptEnabled = true
         binding.webViewReviews.webViewClient = object : WebViewClient() {

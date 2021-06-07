@@ -3,6 +3,7 @@ package dev.dizzy1021.wander.ui.place
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
@@ -112,7 +113,11 @@ class PlaceFragment : Fragment() {
                                 place.data.let {
 
                                     with(binding) {
-                                        this.placeDesc.text = it?.desc
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                            this.placeDesc.text = Html.fromHtml(it?.desc, Html.FROM_HTML_MODE_COMPACT)
+                                        } else {
+                                            this.placeDesc.text = Html.fromHtml(it?.desc)
+                                        }
                                         this.placeLocation.text = it?.location
                                         this.placeName.text = it?.name
                                         this.placeRating.text = it?.rating.toString()

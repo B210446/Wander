@@ -24,7 +24,7 @@ class SharedPreferenceUtil @Inject constructor(
 
     fun setUser() {
         val editor: SharedPreferences.Editor = pref.edit()
-        val user = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6bnVsbH0.Lvu9wZ21LUqYwOsifBIKQ93OsqQe7BRtrwumxxipgFc"
+        val user = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QtdXNlciJ9.ak5a7h5HIN7fbab3KKEvzzkhG8MC_gxzSoSVBOP2ZjA"
 
         editor.putString(PREF_USER, user)
         editor.apply()
