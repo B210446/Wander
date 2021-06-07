@@ -77,7 +77,7 @@ class ReviewFragment : Fragment() {
 
         adapter.setOnItemClickCallback(object : OnItemClickCallback<Review> {
             override fun onItemClicked(data: Review) {
-                navigateToDetailReview(data.id)
+                navigateToDetailReview(data.placeId)
             }
         })
         val user = pref.getUser()

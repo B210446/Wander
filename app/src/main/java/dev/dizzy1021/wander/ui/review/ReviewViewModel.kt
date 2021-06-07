@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ReviewViewModel @Inject constructor(
     private val useCase: ReviewUseCase
 ) : ViewModel() {
-    val review = { id: String ->
-        useCase.fetchReviewPlace(id).cachedIn(viewModelScope)
+    val review = { user: String ->
+        useCase.getReviews(user).cachedIn(viewModelScope)
     }
 }

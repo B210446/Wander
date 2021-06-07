@@ -3,8 +3,6 @@ package dev.dizzy1021.core.data.source.remote
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import dev.dizzy1021.core.data.source.remote.response.ResponsePlace
-import dev.dizzy1021.core.data.source.remote.response.ResponseReviews
-import dev.dizzy1021.core.data.source.remote.response.ResponseWishlist
 import dev.dizzy1021.core.data.source.remote.response.ResponseWrapper
 import dev.dizzy1021.core.data.source.remote.service.Services
 import dev.dizzy1021.core.domain.model.Place
@@ -50,7 +48,7 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
 
                     return LoadResult.Page(
                         data = responseData,
-                        prevKey = response.body()?.links?.self,
+                        prevKey = response.body()?.links?.prev,
                         nextKey = response.body()?.links?.next
                     )
 
@@ -72,12 +70,53 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                     val currentLoadingPageKey = params.key ?: 1
                     val response = services.callWishlist(
                         page = currentLoadingPageKey,
-                        user = user
+                        key = user
                     )
 
                     val responseData = mutableListOf<Place>()
                     val data = response.body()?.data.let {
                         it?.toPlace()
+                    } ?: emptyList()
+
+                    responseData.addAll(data)
+
+                    val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
+                    var nextKey: Int? = currentLoadingPageKey.plus(1)
+
+                    if (data.isEmpty()) {
+                        nextKey = null
+                    }
+
+                    return LoadResult.Page(
+                        data = responseData,
+                        prevKey = prevKey,
+                        nextKey = nextKey
+                    )
+
+                } catch (e: Exception) {
+                    return LoadResult.Error(e)
+                }
+            }
+        }
+
+     fun fetchReview(user: String) =
+        object : PagingSource<Int, Review>() {
+
+            override fun getRefreshKey(state: PagingState<Int, Review>): Int? {
+                return state.anchorPosition
+            }
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Review> {
+                try {
+                    val currentLoadingPageKey = params.key ?: 1
+                    val response = services.callReview(
+                        page = currentLoadingPageKey,
+                        key = user
+                    )
+
+                    val responseData = mutableListOf<Review>()
+                    val data = response.body()?.data.let {
+                        it?.toReViews()
                     } ?: emptyList()
 
                     responseData.addAll(data)
@@ -95,20 +134,6 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }
-
-    suspend fun fetchReview(user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseReviews>>> =
-        flow {
-            services.callReview(
-                page = 1,
-                key = user
-            ).let {
-                if (it.isSuccessful) {
-                    emit(ResourceWrapper.success(it.body()))
-                } else {
-                    emit(ResourceWrapper.failure("Failure when calling data", null))
-                }
-            }
-        }.flowOn(Dispatchers.IO)
 
      fun findPlaces(user: String, q: String?, image: MultipartBody.Part?) =
         object : PagingSource<String, Place>() {
@@ -147,7 +172,7 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }
 
-     fun findPlaces(user: String, q: String?) =
+     fun findPlaces(user: String, q: String?, location: String?) =
         object : PagingSource<String, Place>() {
 
             override fun getRefreshKey(state: PagingState<String, Place>): String? {
@@ -161,7 +186,8 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                     val response = services.searchPlaces(
                         q = q,
                         token = params.key,
-                        key = user
+                        key = user,
+                        loc = location
                     )
 
                     val responseData = mutableListOf<Place>()
@@ -248,6 +274,22 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             desc = desc,
             key = user,
             rating = rating
+        ).let {
+            if (it.isSuccessful) {
+                emit(ResourceWrapper.success(it.body()))
+            } else {
+                emit(ResourceWrapper.failure("Failure when calling data", null))
+            }
+        }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun addWishlist(
+        user: String,
+        place_id: String,
+    ) = flow {
+        services.addWishlist(
+            key = user,
+            place_id = place_id
         ).let {
             if (it.isSuccessful) {
                 emit(ResourceWrapper.success(it.body()))

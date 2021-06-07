@@ -4,7 +4,7 @@ const val DATABASE_NAME = "db_wander"
 const val PLACE_TABLE = "tbl_place"
 const val REVIEW_TABLE = "tbl_review"
 
-const val BASE_URL = "http://34.101.183.119/api/v1/"
+const val BASE_URL = "https://www.wander-api.codes/api/v1/"
 
 const val ARGS_SECTION_NUMBER = "args_section_number"
 const val ARGS_SECTION_IMAGE = "args_section_image"

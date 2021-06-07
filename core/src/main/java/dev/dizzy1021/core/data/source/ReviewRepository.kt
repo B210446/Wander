@@ -27,9 +27,12 @@ class ReviewRepository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : IReviewRepository {
 
-    override fun getReviews(user: String): Flow<ResourceWrapper<List<Review>>> {
-        TODO("Not yet implemented")
-    }
+    override fun getReviews(user: String) =
+        Pager(
+            PagingConfig(pageSize = 14, enablePlaceholders = false)
+        ) {
+            remoteDataSource.fetchReview(user)
+        }.flow.flowOn(Dispatchers.IO)
 
     override fun fetchReviewPlace(id: String, user: String): Flow<PagingData<Review>> =
         Pager(

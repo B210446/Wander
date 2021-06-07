@@ -3,9 +3,9 @@ package dev.dizzy1021.wander.ui.place
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Html
 import android.view.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -33,9 +33,11 @@ class PlaceFragment : Fragment() {
     private lateinit var pagerAdapter: GalleryPagerAdapter
     private lateinit var reviewAdapter: TopReviewAdapter
 
+    private var favorited: Boolean = false
 
     private lateinit var latitude: String
     private lateinit var longitude: String
+    private lateinit var website: String
 
     @Inject
     lateinit var pref: SharedPreferenceUtil
@@ -57,6 +59,8 @@ class PlaceFragment : Fragment() {
             activity?.onBackPressed()
         }
 
+        inflater.inflate(R.menu.detail_menu, menu)
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -73,6 +77,7 @@ class PlaceFragment : Fragment() {
 
         val idPlace = PlaceFragmentArgs.fromBundle(arguments as Bundle).id
         val user = pref.getUser()
+        val actionBar = requireActivity().findViewById<Toolbar>(R.id.main_toolbar)
 
         reviewAdapter = TopReviewAdapter()
         binding.rvTopReview.layoutManager =
@@ -86,8 +91,8 @@ class PlaceFragment : Fragment() {
 
 
         if (isNetworkAvailable(requireActivity())) {
-            user?.let {
-                viewModel.places(idPlace, it).observe(viewLifecycleOwner, { place ->
+            user?.let { user_id ->
+                viewModel.places(idPlace, user_id).observe(viewLifecycleOwner, { place ->
                     if (place != null) {
                         when (place.state) {
                             ResourceState.PENDING -> {
@@ -114,11 +119,24 @@ class PlaceFragment : Fragment() {
                                 place.data.let {
 
                                     with(binding) {
-                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                            this.placeDesc.text = Html.fromHtml(it?.desc, Html.FROM_HTML_MODE_COMPACT)
+
+                                        favorited = it?.isFavorite == true
+                                        
+                                        if (it?.isFavorite == true) {
+                                            actionBar.menu.findItem(R.id.add_favorite).icon =
+                                                ContextCompat.getDrawable(
+                                                    requireContext(),
+                                                    R.drawable.ic_baseline_favorite_24
+                                                )
                                         } else {
-                                            this.placeDesc.text = Html.fromHtml(it?.desc)
+                                            actionBar.menu.findItem(R.id.add_favorite).icon =
+                                                ContextCompat.getDrawable(
+                                                    requireContext(),
+                                                    R.drawable.ic_baseline_favorite_border_24
+                                                )
                                         }
+
+                                        this.placeDesc.text = it?.desc
                                         this.placeLocation.text = it?.location
                                         this.placeName.text = it?.name
                                         this.placeRating.text = it?.rating.toString()
@@ -132,9 +150,12 @@ class PlaceFragment : Fragment() {
 
                                         latitude = it?.latitude.toString()
                                         longitude = it?.longitude.toString()
+                                        website = it?.website.toString()
 
                                         binding.indicatorGallery.text =
                                             "1 / ${pagerAdapter.itemCount}"
+
+
 
                                         it?.topReviews?.let { it1 -> reviewAdapter.submitList(it1) }
 
@@ -178,7 +199,8 @@ class PlaceFragment : Fragment() {
         })
 
         binding.placeOpenMap.setOnClickListener {
-            val gmmIntentUri: Uri = Uri.parse("geo:$latitude,$longitude")
+            val gmmIntentUri = Uri.parse("google.streetview:cbll=$longitude,$latitude")
+
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             startActivity(mapIntent)
@@ -210,6 +232,35 @@ class PlaceFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.open_browser -> {
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                intent.data = Uri.parse(website)
+                startActivity(intent)
+                return true
+            }
+            R.id.add_favorite -> {
+                favorited = !favorited
+
+                val user = pref.getUser()
+                val idPlace = PlaceFragmentArgs.fromBundle(arguments as Bundle).id
+
+                user?.let { viewModel.addFavorite(idPlace, it).observe(viewLifecycleOwner, { res ->
+                    when (res.state) {
+                        ResourceState.PENDING -> {}
+                        ResourceState.SUCCESS -> {
+                            if (favorited) {
+                                item.setIcon(R.drawable.ic_baseline_favorite_24)
+                            } else {
+                                item.setIcon(R.drawable.ic_baseline_favorite_border_24)
+                            }
+                        }
+                        ResourceState.FAILURE -> {}
+                    }
+                }) }
+
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

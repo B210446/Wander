@@ -16,5 +16,5 @@ interface PlaceUseCase {
 
     fun fetchPlace(id: String, user: String): Flow<ResourceWrapper<Place>>
 
-    fun addWishlist(id: Int, place: Place, user: String)
+    fun addWishlist(id: String, user: String): Flow<ResourceWrapper<Any?>>
 }

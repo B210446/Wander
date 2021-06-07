@@ -13,6 +13,7 @@ data class Place(
     val longitude: String,
     val latitude: String,
     val poster: String?,
+    val website: String,
     val gallery: List<ImagePath>,
     val topReviews: List<Review>?,
     var isFavorite: Boolean = false,

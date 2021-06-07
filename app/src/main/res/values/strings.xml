@@ -34,4 +34,6 @@
     <string name="best_place">Best Place!</string>
     <string name="wishlist">Wishlist</string>
     <string name="review">My Review</string>
+    <string name="favorite_place">favorite places</string>
+    <string name="open_in_browser">open in browser</string>
 </resources>

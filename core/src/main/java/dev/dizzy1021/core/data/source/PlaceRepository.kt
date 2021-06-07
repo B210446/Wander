@@ -70,10 +70,16 @@ class PlaceRepository @Inject constructor(
                 null
             }
 
+            var loc: String? = null
+
+            if(q?.contains("geo:") == true) {
+                loc = q.split(":")[1]
+            }
+
             val response = if (imagePart != null) {
                 remoteDataSource.findPlaces(q = q, user = user, image = imagePart)
             } else {
-                remoteDataSource.findPlaces(q = q, user = user)
+                remoteDataSource.findPlaces(q = q, location = loc, user = user)
             }
 
             response
@@ -103,7 +109,23 @@ class PlaceRepository @Inject constructor(
             IdlingResourceUtil.decrement()
         }.flowOn(Dispatchers.IO)
 
-    override fun addWishlist(id: Int,  place: Place, user: String) {
-        TODO("Not yet implemented")
-    }
+    override fun addWishlist(id: String, user: String) =
+        flow {
+            IdlingResourceUtil.increment()
+            emit(ResourceWrapper.pending(null))
+
+            val response = remoteDataSource.addWishlist(user = user, place_id = id)
+                .first()
+
+            when (response.state) {
+                ResourceState.SUCCESS -> {
+                    emit(ResourceWrapper.success(null))
+                }
+                ResourceState.FAILURE -> {
+                    emit(ResourceWrapper.failure(response.message.toString(), null))
+                }
+                ResourceState.PENDING -> {}
+            }
+            IdlingResourceUtil.decrement()
+        }.flowOn(Dispatchers.IO)
 }

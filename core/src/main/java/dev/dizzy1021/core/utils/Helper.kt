@@ -25,7 +25,8 @@ fun List<ResponseHome>.toPlace(): List<Place> =
             poster = it.poster?.url,
             gallery = emptyList(),
             topReviews = emptyList(),
-            isFavorite = it.isFavorite
+            isFavorite = it.isFavorite,
+            website = it.openLink
         )
     }
 
@@ -60,7 +61,8 @@ fun ResponsePlace.toPlace(): Place =
         poster = this.imagePath[0].url,
         gallery = this.imagePath.toImagePath(),
         topReviews = this.topReviews?.toReViews(),
-        isFavorite = this.isFavorite
+        isFavorite = this.isFavorite,
+        website = this.openLink
     )
 
 fun <T : Any, V : RecyclerView.ViewHolder> PagingDataAdapter<T, V>.withLoadStateAdapters(

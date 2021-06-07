@@ -25,5 +25,5 @@ class ImplPlaceRepository @Inject constructor(
 
     override fun fetchPlace(id: String, user: String): Flow<ResourceWrapper<Place>> = repository.fetchPlace(id, user)
 
-    override fun addWishlist(id: Int, place: Place, user: String) = repository.addWishlist(id, place, user)
+    override fun addWishlist(id: String, user: String): Flow<ResourceWrapper<Any?>> = repository.addWishlist(id, user)
 }

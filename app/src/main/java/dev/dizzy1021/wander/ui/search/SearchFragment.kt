@@ -90,7 +90,7 @@ class SearchFragment : Fragment() {
                 fusedLocation.lastLocation
                     .addOnSuccessListener { loc: Location? ->
                         lifecycleScope.launch {
-                            viewModel.queryChannel.send("${loc?.latitude.toString()},${loc?.longitude.toString()}")
+                            viewModel.queryChannel.send("geo:${loc?.latitude.toString()},${loc?.longitude.toString()}")
                         }
                     }
             } else {

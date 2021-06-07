@@ -24,7 +24,7 @@ class SearchViewModel @Inject constructor(
 
         queryChannel
             .asFlow()
-            .debounce(700)
+            .debounce(1000)
             .distinctUntilChanged()
             .filter {
                 return@filter it.trim().length >= 3

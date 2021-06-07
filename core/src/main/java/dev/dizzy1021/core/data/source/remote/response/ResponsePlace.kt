@@ -20,7 +20,7 @@ data class ResponsePlace(
 	val name: String,
 
 	@field:SerializedName("open_link")
-	val openLink: String? = null,
+	val openLink: String,
 
 	@field:SerializedName("rating")
 	val rating: Double,

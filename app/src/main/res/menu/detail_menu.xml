@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/open_browser"
+        android:icon="@drawable/ic_baseline_open_in_browser_24"
+        android:title="@string/open_in_browser"
+        app:iconTint="@color/blue"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/add_favorite"
+        android:icon="@drawable/ic_baseline_favorite_border_24"
+        android:title="@string/favorite_place"
+        app:iconTint="@color/blue"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -20,7 +20,7 @@ data class ResponseHome(
 	val rating: Double,
 
 	@field:SerializedName("open_link")
-	val openLink: String? = null,
+	val openLink: String,
 
 	@field:SerializedName("location")
 	val location: String? = null,

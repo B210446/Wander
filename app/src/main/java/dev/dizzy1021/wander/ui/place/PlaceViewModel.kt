@@ -15,4 +15,8 @@ class PlaceViewModel @Inject constructor(
         useCase.fetchPlace(id, user).asLiveData()
     }
 
+    val addFavorite = { id: String, user: String ->
+        useCase.addWishlist(id, user).asLiveData()
+    }
+
 }
