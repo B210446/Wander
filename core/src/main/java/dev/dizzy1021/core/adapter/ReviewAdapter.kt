@@ -24,6 +24,7 @@ class ReviewAdapter : PagingDataAdapter<Review, ReviewAdapter.ListViewHolder>(Di
 
         fun bind(items: Review) {
             with(binding) {
+                reviewPlace.text = items.placeName
                 reviewDate.text = items.date
                 reviewDesc.text = items.desc
                 reviewUser.text = StringBuilder()

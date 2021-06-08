@@ -78,7 +78,7 @@ class PlaceReviewFragment : Fragment() {
 
         if (isNetworkAvailable(requireActivity())) {
 
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 user?.let {
                     viewModel.reviews(idPlace, it).collectLatest { reviews ->
                         binding.networkError.isGone = true

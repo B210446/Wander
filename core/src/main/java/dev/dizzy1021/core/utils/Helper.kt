@@ -38,6 +38,7 @@ fun List<ResponseReviews>.toReViews(): List<Review> =
             desc = it.desc,
             date = it.date,
             placeId = it.placeId,
+            placeName = it.placeName
         )
     }
 
@@ -62,6 +63,7 @@ fun ResponsePlace.toPlace(): Place =
         gallery = this.imagePath.toImagePath(),
         topReviews = this.topReviews?.toReViews(),
         isFavorite = this.isFavorite,
+        isReviewed = this.isReviewed,
         website = this.openLink
     )
 

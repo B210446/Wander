@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import dev.dizzy1021.core.adapter.PlaceLoadStateAdapter
 import dev.dizzy1021.core.adapter.ReviewAdapter
+import dev.dizzy1021.core.adapter.ReviewLoadStateAdapter
 import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.domain.model.Review
 import dev.dizzy1021.core.utils.SharedPreferenceUtil
@@ -66,12 +67,12 @@ class ReviewFragment : Fragment() {
         val adapter = ReviewAdapter()
 
         binding.rvReview.adapter = adapter.withLoadStateAdapters(
-            header = PlaceLoadStateAdapter { adapter.refresh() },
-            footer = PlaceLoadStateAdapter { adapter.retry() }
+            header = ReviewLoadStateAdapter { adapter.refresh() },
+            footer = ReviewLoadStateAdapter { adapter.retry() }
         )
 
         binding.rvReview.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            LinearLayoutManager(context)
 
         binding.rvReview.setHasFixedSize(true)
 
@@ -84,11 +85,18 @@ class ReviewFragment : Fragment() {
 
         if (isNetworkAvailable(requireActivity())) {
             user?.let {
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.review(it).collectLatest { places ->
-                        binding.networkError.isGone = true
                         binding.rvReview.isVisible = true
                         adapter.submitData(places)
+                    }
+                }
+                viewLifecycleOwner.lifecycleScope.launch {
+                    adapter.loadStateFlow.collectLatest { loadStates ->
+                        binding.networkError.isVisible = loadStates.refresh is LoadState.Error
+                        if (loadStates.append is LoadState.NotLoading && loadStates.append.endOfPaginationReached) {
+                            binding.noData.isVisible = adapter.itemCount < 1
+                        }
                     }
                 }
             }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.dizzy1021.core.adapter.PlaceAdapter
@@ -100,11 +101,18 @@ class HomeFragment : Fragment() {
 
         if (isNetworkAvailable(requireActivity())) {
             user?.let {
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.places(it).collectLatest { places ->
-                        binding.networkError.isGone = true
                         binding.rvHome.isVisible = true
                         adapter.submitData(places)
+
+                    }
+                }
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    adapter.loadStateFlow.collectLatest { loadStates ->
+                        binding.shimmerContainer.isVisible = loadStates.refresh is LoadState.Loading
+                        binding.networkError.isVisible = loadStates.refresh is LoadState.Error
                     }
                 }
             }

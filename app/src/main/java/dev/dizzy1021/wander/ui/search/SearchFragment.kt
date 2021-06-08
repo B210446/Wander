@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -89,7 +90,7 @@ class SearchFragment : Fragment() {
             if (isLocationEnabled()) {
                 fusedLocation.lastLocation
                     .addOnSuccessListener { loc: Location? ->
-                        lifecycleScope.launch {
+                        viewLifecycleOwner.lifecycleScope.launch {
                             viewModel.queryChannel.send("geo:${loc?.latitude.toString()},${loc?.longitude.toString()}")
                         }
                     }
@@ -147,7 +148,6 @@ class SearchFragment : Fragment() {
             val searchManager =
                 requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-            binding.networkError.isGone = true
             binding.searchData.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
 
             binding.searchData.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -156,10 +156,23 @@ class SearchFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycleScope.launch {
                         viewModel.queryChannel.send(newText.toString())
+//                        adapter.refresh()
                     }
-                    adapter.refresh()
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        adapter.loadStateFlow.collectLatest { loadStates ->
+                            binding.shimmerContainer.isVisible = loadStates.refresh is LoadState.Loading
+                            binding.networkError.isVisible = loadStates.refresh is LoadState.Error
+                            if (loadStates.append is LoadState.NotLoading && loadStates.append.endOfPaginationReached) {
+                                if(!binding.shimmerContainer.isVisible) {
+                                    binding.noData.isVisible = adapter.itemCount < 1
+                                }
+                            }
+                        }
+                    }
+
                     return true
                 }
 
@@ -212,11 +225,10 @@ class SearchFragment : Fragment() {
         val user = pref.getUser()
 
         user?.let {
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.places(it, inputStream).collectLatest { places ->
-                    binding.networkError.isGone = true
                     binding.rvSearch.isVisible = true
-
+                    binding.shimmerContainer.isVisible = false
                     adapter.submitData(places)
                     adapter.notifyDataSetChanged()
                 }
@@ -245,12 +257,13 @@ class SearchFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
 
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     val compressed = photoFile?.let { compressImage(it) }
                     if (compressed != null) {
                         postImage(compressed)
                     }
                 }
+
             }
         }
 

@@ -10,6 +10,9 @@ data class ResponsePlace(
 	@field:SerializedName("is_favorite")
 	val isFavorite: Boolean,
 
+	@field:SerializedName("is_reviewed")
+	val isReviewed: Boolean,
+
 	@field:SerializedName("image_path")
 	val imagePath: List<Poster>,
 

@@ -17,6 +17,7 @@ data class Place(
     val gallery: List<ImagePath>,
     val topReviews: List<Review>?,
     var isFavorite: Boolean = false,
+    var isReviewed: Boolean = false,
 ): Parcelable
 
 @Parcelize

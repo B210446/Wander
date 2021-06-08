@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.dizzy1021.core.adapter.PlaceAdapter
@@ -84,11 +85,20 @@ class WishlistFragment : Fragment() {
 
         if (isNetworkAvailable(requireActivity())) {
             user?.let {
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.wishlist(it).collectLatest { places ->
-                        binding.networkError.isGone = true
                         binding.rvWishlist.isVisible = true
                         adapter.submitData(places)
+                    }
+                }
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    adapter.loadStateFlow.collectLatest { loadStates ->
+                        binding.shimmerContainer.isVisible = loadStates.refresh is LoadState.Loading
+                        binding.networkError.isVisible = loadStates.refresh is LoadState.Error
+                        if (loadStates.append is LoadState.NotLoading && loadStates.append.endOfPaginationReached) {
+                            binding.noData.isVisible = adapter.itemCount < 1
+                        }
                     }
                 }
             }

@@ -7,6 +7,18 @@
     tools:context=".ui.review.ReviewFragment">
 
     <TextView
+        android:id="@+id/no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center_vertical"
+        android:text="@string/not_found"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="22sp"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/network_error"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

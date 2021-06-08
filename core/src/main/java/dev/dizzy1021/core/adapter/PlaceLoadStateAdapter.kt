@@ -36,7 +36,7 @@ class PlaceLoadStateAdapter(
         fun bind(loadState: LoadState) {
             binding.btnRetry.isVisible = loadState !is LoadState.Loading
             binding.stateError.isVisible = loadState !is LoadState.Loading
-            binding.shimmerContainer.isVisible = loadState is LoadState.Loading
+//            binding.shimmerContainer.isVisible = loadState is LoadState.Loading
 
             if (loadState is LoadState.Error){
                 binding.stateError.text = loadState.error.localizedMessage

@@ -16,6 +16,9 @@ data class ResponseReviews(
     @field:SerializedName("place_id")
     val placeId: String,
 
+    @field:SerializedName("place_name")
+    val placeName: String?,
+
     @field:SerializedName("username")
     val username: String,
 

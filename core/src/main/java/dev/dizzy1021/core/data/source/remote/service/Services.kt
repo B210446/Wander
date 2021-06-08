@@ -58,17 +58,17 @@ interface Services {
         @Query("key") key: String
     ): Response<ResponseWrapper<ResponsePlace>>
 
-    @GET("place/{id}/review")
+    @GET("place/review")
     suspend fun callReviewPlace(
-        @Path("id") id: String,
+        @Query("id") id: String,
         @Query("key") key: String,
         @Query("page") page: Int,
     ): Response<ResponseWrapper<List<ResponseReviews>>>
 
     @Multipart
-    @POST("place/{id}/review")
+    @POST("place/review")
     suspend fun createReview(
-        @Path("id") id: String,
+        @Query("id") id: String,
         @Query("key") key: String,
         @Part images: List<MultipartBody.Part?>,
         @Part("desc") desc: RequestBody,

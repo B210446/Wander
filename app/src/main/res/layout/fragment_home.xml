@@ -6,6 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_container"
+        app:shimmer_auto_start="true"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_repeat_count="5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:useDefaultMargins="true"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+        </GridLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <TextView
         android:id="@+id/network_error"
         android:layout_width="wrap_content"
@@ -17,19 +49,6 @@
         android:textColor="?attr/colorOnPrimary"
         android:textSize="22sp"
         android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/not_found"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:fontFamily="@font/montserrat_semibold"
-        android:gravity="center_vertical"
-        android:text="@string/not_found"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="22sp"
-        android:visibility="gone"
-        tools:ignore="DuplicateIds" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home"

@@ -122,11 +122,16 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                     responseData.addAll(data)
 
                     val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
+                    var nextKey: Int? = currentLoadingPageKey.plus(1)
+
+                    if (data.isEmpty()) {
+                        nextKey = null
+                    }
 
                     return LoadResult.Page(
                         data = responseData,
                         prevKey = prevKey,
-                        nextKey = currentLoadingPageKey.plus(1)
+                        nextKey = nextKey
                     )
 
                 } catch (e: Exception) {

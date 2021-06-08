@@ -136,10 +136,12 @@ class PlaceFragment : Fragment() {
                                                 )
                                         }
 
-                                        this.placeDesc.text = it?.desc
-                                        this.placeLocation.text = it?.location
-                                        this.placeName.text = it?.name
-                                        this.placeRating.text = it?.rating.toString()
+                                        placeDesc.text = it?.desc
+                                        placeLocation.text = it?.location
+                                        placeName.text = it?.name
+                                        placeRating.text = it?.rating.toString()
+
+                                        buttonGiveReview.isGone = it?.isReviewed == true
 
                                         pagerAdapter = GalleryPagerAdapter(
                                             this@PlaceFragment,

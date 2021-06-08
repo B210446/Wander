@@ -44,6 +44,7 @@
         android:orientation="vertical"
         app:shimmer_auto_start="true"
         app:shimmer_repeat_count="5"
+        android:visibility="gone"
         app:shimmer_repeat_mode="restart">
 
         <GridLayout
